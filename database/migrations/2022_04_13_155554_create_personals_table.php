@@ -15,10 +15,10 @@ class CreatePersonalsTable extends Migration
     {
         Schema::create('personals', function (Blueprint $table) {
             $table->id();
-            $table->integer('cedula');
+            $table->string('cedula');
             $table->string('nombre');
             $table->string('apellido');
-            $table->integer('telefono');
+            $table->string('telefono');
             $table->string('email');
             $table->string('ubicacion_nominal');
             $table->string('cargo');
