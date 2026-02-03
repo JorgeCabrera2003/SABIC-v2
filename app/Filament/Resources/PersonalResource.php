@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
 
 class PersonalResource extends Resource
 {
@@ -62,6 +63,8 @@ class PersonalResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('foto_dir')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('cedula')
                     ->numeric()
                     ->sortable(),
@@ -77,8 +80,6 @@ class PersonalResource extends Resource
                 Tables\Columns\TextColumn::make('ubicacion_nominal')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('cargo')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('foto_dir')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('curriculo_dir')
                     ->searchable(),
