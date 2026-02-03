@@ -73,8 +73,7 @@ class PersonalResource extends Resource
                 Tables\Columns\TextColumn::make('apellido')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('telefono')
-                    ->numeric()
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ubicacion_nominal')
