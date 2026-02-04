@@ -11,6 +11,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use Illuminate\Support\HtmlString;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -27,11 +28,13 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->sidebarFullyCollapsibleOnDesktop()
             ->brandName('SABIC')
+            ->favicon(asset('favicon.png'))
+            ->brandLogo(fn () => new HtmlString('<div class="flex items-center"><img src="'.asset('favicon.png').'" alt="SABIC" class="mr-2" style="height:1.5rem;"/><span style="margin-left: 5px;">SABIC</span></div>'))
             ->id('admin')
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Red,
+                'primary' => Color::Yellow,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
