@@ -24,6 +24,9 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->sidebarCollapsibleOnDesktop()
+            ->sidebarFullyCollapsibleOnDesktop()
+            ->brandName('SABIC')
             ->id('admin')
             ->path('admin')
             ->login()
