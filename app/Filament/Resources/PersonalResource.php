@@ -26,7 +26,7 @@ class PersonalResource extends Resource
 {
     protected static ?string $model = Personal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
