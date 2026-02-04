@@ -10,8 +10,6 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
-use Illuminate\Support\HtmlString;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -19,32 +17,27 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class AttendancePanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->sidebarCollapsibleOnDesktop()
-            ->sidebarFullyCollapsibleOnDesktop()
-            ->brandName('SABIC')
+            ->id('attendance')
+            ->path('attendance') // Accesible en /attendance
+            ->brandName('Registro de Asistencia')
             ->favicon(asset('favicon.png'))
-            ->brandLogo(fn () => new HtmlString('<div class="flex items-center"><img src="'.asset('favicon.png').'" alt="SABIC" class="mr-2" style="height:1.5rem;"/><span style="margin-left: 5px;">SABIC</span></div>'))
-            ->id('admin')
-            ->path('admin')
-            ->login()
             ->colors([
                 'primary' => Color::Yellow,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/Attendance/Resources'), for: 'App\\Filament\\Attendance\\Resources')
+            ->discoverPages(in: app_path('Filament/Attendance/Pages'), for: 'App\\Filament\\Attendance\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\Attendance\Pages\AttendanceDashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->homeUrl(fn (): string => url('/attendance/register-attendance'))
+            ->discoverWidgets(in: app_path('Filament/Attendance/Widgets'), for: 'App\\Filament\\Attendance\\Widgets')
             ->widgets([
-                //Widgets\AccountWidget::class,
-                //Widgets\FilamentInfoWidget::class,
+                // Widgets personalizados para la asistencia
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -57,11 +50,14 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-             ->plugins([
-                //\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
-            ])
             ->authMiddleware([
-                Authenticate::class,
-            ]);
+                // Comentar o eliminar esta línea para hacerlo público
+                // Authenticate::class,
+            ])
+            //->plugins([
+            //    \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+            //])
+            ->topNavigation() // Navegación superior para mejor UX
+            ->sidebarCollapsibleOnDesktop(false); // Sidebar siempre visible
     }
 }

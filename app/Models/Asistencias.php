@@ -5,16 +5,38 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class asistencias extends Model
+class Asistencias extends Model
 {
     use HasFactory;
+    
+    protected $table = 'attendance';
+    
     protected $fillable = [
-        'id',
-        'id_empleado',
-        'dia',
-        'hora',
-        'tipo_registro',
-        'foto_dir',
-        'nota',
+        'id_personal',
+        'day',
+        'hour',
+        'record_type',
     ];
+    
+    // Relación con Personal
+    public function personal()
+    {
+        return $this->belongsTo(Personal::class, 'id_personal');
+    }
+    
+    public $timestamps = false;
+    
+    // Scope para registros de hoy
+    public function scopeToday($query)
+    {
+        return $query->where('day', now()->toDateString());
+    }
+    
+    // Método para verificar si ya registró hoy
+    public static function hasRegisteredToday($personalId): bool
+    {
+        return self::where('id_personal', $personalId)
+            ->where('day', now()->toDateString())
+            ->exists();
+    }
 }
