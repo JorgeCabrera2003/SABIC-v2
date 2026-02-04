@@ -17,6 +17,10 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\Section; // Importar la clase Section
 use Filament\Forms\Components\Grid;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section as InfoSection;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 
 class PersonalResource extends Resource
 {
@@ -124,6 +128,36 @@ class PersonalResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                InfoSection::make('Ficha del Empleado')
+                    ->schema([
+                        ImageEntry::make('foto_dir')
+                            ->label('Fotografía')
+                            ->circular(),
+                        TextEntry::make('cedula')
+                            ->label('Cédula'),
+                        TextEntry::make('nombre')
+                            ->label('Nombres'),
+                        TextEntry::make('apellido')
+                            ->label('Apellidos'),
+                    ])->columns(2),
+
+                InfoSection::make('Documentación Adjunta')
+                    ->schema([
+                        TextEntry::make('curriculo_dir')
+                            ->label('Currículo Vitae')
+                            ->formatStateUsing(fn() => 'Abrir documento PDF')
+                            ->color('primary')
+                            ->icon('heroicon-o-document-arrow-down')
+                            ->url(fn($record) => asset('storage/' . $record->curriculo_dir), shouldOpenInNewTab: true)
+                            ->visible(fn($record) => !empty($record->curriculo_dir)),
+                    ]),
             ]);
     }
 
