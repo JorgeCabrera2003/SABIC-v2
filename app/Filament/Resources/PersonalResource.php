@@ -101,8 +101,8 @@ class PersonalResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('cargo')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('curriculo_dir')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('curriculo_dir')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
