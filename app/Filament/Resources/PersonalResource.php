@@ -89,7 +89,8 @@ class PersonalResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('foto_dir')
-                    ->searchable(),
+                    ->searchable()
+                    ->circular(),
                 Tables\Columns\TextColumn::make('cedula')
                     ->numeric()
                     ->sortable(),
