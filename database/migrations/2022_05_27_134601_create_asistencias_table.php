@@ -13,16 +13,14 @@ class CreateAsistenciasTable extends Migration
      */
     public function up()
     {
-        Schema::create('asistencias', function (Blueprint $table) {
+        Schema::create('attendance', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_empleado');
-            $table->date('dia');
-            $table->time('hora');
-            $table->string('tipo_registro');
-            $table->string('foto_dir');
-            $table->string('nota')->nullable();
-            $table->timestamps();
+            $table->foreignId('id_personal')->constrained('personals')->onDelete('cascade');
+            $table->date('day')->currentDate();
+            $table->time('hour')->currentTime();
+            $table->enum('record_type', ['HUELLA', 'MANUAL']);
         });
+
     }
     /**
      * Reverse the migrations.

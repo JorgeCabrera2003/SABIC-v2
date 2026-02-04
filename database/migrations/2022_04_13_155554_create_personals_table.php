@@ -15,16 +15,14 @@ class CreatePersonalsTable extends Migration
     {
         Schema::create('personals', function (Blueprint $table) {
             $table->id();
-            $table->string('cedula');
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('telefono');
+            $table->string('document');
+            $table->string('name');
+            $table->string('last_name');
+            $table->string('phone_number');
             $table->string('email');
-            $table->string('ubicacion_nominal');
-            $table->string('cargo');
-            $table->string('foto_dir');
-            $table->string('curriculo_dir');
-            $table->timestamps();
+            $table->string('nominal_location');
+            $table->string('position');
+            $table->string('photo_dir');
         });
     }
 
