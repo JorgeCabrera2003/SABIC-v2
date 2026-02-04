@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\Section; // Importar la clase Section
+use Filament\Forms\Components\Grid;
 
 class PersonalResource extends Resource
 {
@@ -26,36 +28,55 @@ class PersonalResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('cedula')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('nombre')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('apellido')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('telefono')
-                    ->tel()
-                    ->required()
-                    ->maxLength(20),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('ubicacion_nominal')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('cargo')
-                    ->required()
-                    ->maxLength(255),
-                FileUpload::make('foto_dir')
-                    ->image() // Para que solo acepte imágenes
-                    ->directory('fotos-personal'),
+                Section::make('Información Identitaria')
+                    ->description('Datos principales del trabajador')
+                    ->schema([
+                        Forms\Components\TextInput::make('cedula')
+                            ->label('Cédula de Identidad')
+                            ->required()
+                            ->numeric()
+                            ->columnSpan(1), // Ocupa una columna
+                        Grid::make(2) // Una rejilla de 2 columnas dentro de la sección
+                            ->schema([
+                                Forms\Components\TextInput::make('nombre')
+                                    ->label('Nombres')
+                                    ->required(),
+                                Forms\Components\TextInput::make('apellido')
+                                    ->label('Apellidos')
+                                    ->required(),
+                            ]),
+                    ])->columns(2),
 
-                FileUpload::make('curriculo_dir')
-                    ->acceptedFileTypes(['application/pdf']) // Para solo PDFs
-                    ->directory('curriculos'),
+                Section::make('Contacto y Cargo')
+                    ->schema([
+                        Forms\Components\TextInput::make('telefono')
+                            ->label('Teléfono')
+                            ->tel()
+                            ->required(),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Correo Electrónico')
+                            ->email()
+                            ->required(),
+                        Forms\Components\TextInput::make('ubicacion_nominal')
+                            ->label('Ubicación Nominal')
+                            ->required(),
+                        Forms\Components\TextInput::make('cargo')
+                            ->label('Cargo Actual')
+                            ->required(),
+                    ])->columns(2),
+
+                Section::make('Archivos y Documentación')
+                    ->description('Suba la fotografía y el currículo en formato PDF')
+                    ->schema([
+                        FileUpload::make('foto_dir')
+                            ->label('Foto de Perfil')
+                            ->image()
+                            ->directory('fotos-personal'),
+                        FileUpload::make('curriculo_dir')
+                            ->label('Currículo Vitae (PDF)')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->directory('curriculos'),
+                    ])->columns(2),
             ]);
     }
 
