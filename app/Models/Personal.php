@@ -9,14 +9,15 @@ class Personal extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'cedula',
-        'nombre',
-        'apellido',
-        'telefono',
+        'document',
+        'name',
+        'last_name',
+        'phone_number',
         'email',
-        'ubicacion_nominal',
-        'cargo',
-        'foto_dir',
-        'curriculo_dir',
+        'nominal_location',
+        'position',
+        'photo_dir',
     ];
+    
+    public $timestamps = false;
 }
