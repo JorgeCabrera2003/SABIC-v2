@@ -35,25 +35,25 @@ class PersonalResource extends Resource
                 Section::make('Información Identitaria')
                     ->description('Datos principales del trabajador')
                     ->schema([
-                        Forms\Components\TextInput::make('cedula')
+                        Forms\Components\TextInput::make('document')
                             ->label('Cédula de Identidad')
                             ->required()
                             ->numeric()
                             ->columnSpan(1), // Ocupa una columna
-                        Grid::make(2) // Una rejilla de 2 columnas dentro de la sección
-                            ->schema([
-                                Forms\Components\TextInput::make('nombre')
+                        // Grid::make(2) // Una rejilla de 2 columnas dentro de la sección
+                        //     ->schema([
+                                Forms\Components\TextInput::make('name')
                                     ->label('Nombres')
                                     ->required(),
-                                Forms\Components\TextInput::make('apellido')
+                                Forms\Components\TextInput::make('last_name')
                                     ->label('Apellidos')
                                     ->required(),
-                            ]),
-                    ])->columns(2),
+                            // ]),
+                    ])->columns(3),
 
                 Section::make('Contacto y Cargo')
                     ->schema([
-                        Forms\Components\TextInput::make('telefono')
+                        Forms\Components\TextInput::make('phone_number')
                             ->label('Teléfono')
                             ->tel()
                             ->required(),
@@ -61,26 +61,22 @@ class PersonalResource extends Resource
                             ->label('Correo Electrónico')
                             ->email()
                             ->required(),
-                        Forms\Components\TextInput::make('ubicacion_nominal')
+                        Forms\Components\TextInput::make('nominal_location')
                             ->label('Ubicación Nominal')
                             ->required(),
-                        Forms\Components\TextInput::make('cargo')
+                        Forms\Components\TextInput::make('position')
                             ->label('Cargo Actual')
                             ->required(),
                     ])->columns(2),
 
                 Section::make('Archivos y Documentación')
-                    ->description('Suba la fotografía y el currículo en formato PDF')
+                    ->description('Suba la fotografía')
                     ->schema([
-                        FileUpload::make('foto_dir')
+                        FileUpload::make('photo_dir')
                             ->label('Foto de Perfil')
                             ->image()
                             ->directory('fotos-personal'),
-                        FileUpload::make('curriculo_dir')
-                            ->label('Currículo Vitae (PDF)')
-                            ->acceptedFileTypes(['application/pdf'])
-                            ->directory('curriculos'),
-                    ])->columns(2),
+                    ])->columns(1),
             ]);
     }
 
@@ -88,34 +84,24 @@ class PersonalResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('foto_dir')
+                ImageColumn::make('photo_dir')
                     ->searchable()
                     ->circular(),
-                Tables\Columns\TextColumn::make('cedula')
+                Tables\Columns\TextColumn::make('document')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('nombre')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('apellido')
+                Tables\Columns\TextColumn::make('last_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('telefono')
+                Tables\Columns\TextColumn::make('phone_number')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('ubicacion_nominal')
+                Tables\Columns\TextColumn::make('nominal_location')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('cargo')
+                Tables\Columns\TextColumn::make('position')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('curriculo_dir')
-                //     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -138,14 +124,14 @@ class PersonalResource extends Resource
             ->schema([
                 InfoSection::make('Ficha del Empleado')
                     ->schema([
-                        ImageEntry::make('foto_dir')
+                        ImageEntry::make('photo_dir')
                             ->label('Fotografía')
                             ->circular(),
-                        TextEntry::make('cedula')
+                        TextEntry::make('document')
                             ->label('Cédula'),
-                        TextEntry::make('nombre')
+                        TextEntry::make('name')
                             ->label('Nombres'),
-                        TextEntry::make('apellido')
+                        TextEntry::make('last_name')
                             ->label('Apellidos'),
                     ])->columns(2),
 
