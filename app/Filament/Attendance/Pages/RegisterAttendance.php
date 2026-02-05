@@ -29,7 +29,6 @@ class RegisterAttendance extends Page implements HasForms
 
     public ?array $data = [];
 
-    // Variable para almacenar el último registro procesado
     public ?Asistencias $lastRecord = null;
 
     public function mount(): void
@@ -166,6 +165,25 @@ class RegisterAttendance extends Page implements HasForms
                 ->send();
 
             // Enfocar de nuevo para corregir
+            return;
+        }
+
+        if (!in_array($empleado->status, ['active', 'authorized'])) {
+            $statusLabel = match ($empleado->status) {
+                'inactive' => 'INACTIVO',
+                'vacation' => 'EN VACACIONES',
+                'unauthorized' => 'NO AUTORIZADO',
+                default => strtoupper($empleado->status),
+            };
+
+            Notification::make()
+                ->title('Acceso Denegado')
+                ->body("El trabajador se encuentra en estatus: {$statusLabel}. No puede registrar asistencia.")
+                ->warning() // Color naranja para advertencia
+                ->persistent()
+                ->send();
+
+            $this->form->fill(['document' => '']); // Limpiar para el siguiente
             return;
         }
 
