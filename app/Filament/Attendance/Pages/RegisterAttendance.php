@@ -92,58 +92,54 @@ class RegisterAttendance extends Page implements HasForms
                                     ->content(function () {
                                         if (!$this->lastRecord) {
                                             return new HtmlString('
-                        <div class="flex flex-col items-center justify-center p-10 text-gray-400 border-2 border-dashed border-gray-300 rounded-lg">
-                            <span class="text-lg">Esperando registro...</span>
-                        </div>
-                    ');
+                                                <div class="flex flex-col items-center justify-center p-10 text-gray-400 border-2 border-dashed border-gray-300 rounded-lg">
+                                                    <span class="text-lg">Esperando registro...</span>
+                                                </div>
+                                            ');
                                         }
 
                                         $p = $this->lastRecord->personal;
-
-                                        // CORRECCIÓN DEL OPERADOR TERNARIO:
-                                        // Si existe photo_dir, generamos la URL, de lo contrario usamos un avatar por defecto
-                                        $fotoUrl = ($p->photo_dir)
-                                            ? asset('storage/' . $p->photo_dir)
-                                            : "https://ui-avatars.com/api/?name=" . urlencode($p->name . ' ' . $p->last_name) . "&color=7F9CF5&background=EBF4FF";
+                                        $fotoPath = $p->photo_dir ?: 'fotos-personal/default.png';
+                                        $fotoUrl = asset('storage/' . $fotoPath);
 
                                         $hora = \Carbon\Carbon::parse($this->lastRecord->hour)->format('h:i A');
 
                                         return new HtmlString("
-                    <div class='flex flex-col md:flex-row gap-4 items-center bg-white dark:bg-gray-800 p-2 rounded-xl border border-gray-100 dark:border-gray-700'>
-                        
-                        <div class='w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg shadow-sm border-2 border-primary-500'>
-                            <img src='{$fotoUrl}' 
-                                 class='w-full h-full object-cover' 
-                                 style='aspect-ratio: 1/1;'
-                                 alt='Foto de {$p->name}'>
-                        </div>
+                                            <div class='flex flex-col md:flex-row gap-4 items-center bg-white dark:bg-gray-800 p-2 rounded-xl border border-gray-100 dark:border-gray-700'>
+                                                
+                                                <div class='w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg shadow-sm border-2 border-primary-500'>
+                                                    <img src='{$fotoUrl}' 
+                                                        class='w-full h-full object-cover' 
+                                                        style='aspect-ratio: 1/1;'
+                                                        alt='Foto de {$p->name}'>
+                                                </div>
 
-                        <div class='flex-1 min-w-0 px-2'>
-                            <div class='mb-1'>
-                                <span class='text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-success-500/10 text-success-600 rounded-full'>
-                                    Entrada Confirmada
-                                </span>
-                            </div>
-                            <h2 class='text-xl font-bold text-gray-900 dark:text-white truncate'>
-                                {$p->name} {$p->last_name}
-                            </h2>
-                            <div class='grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-sm'>
-                                <div>
-                                    <p class='text-gray-400 text-[10px] uppercase'>Cédula</p>
-                                    <p class='font-medium'>{$p->document}</p>
-                                </div>
-                                <div>
-                                    <p class='text-gray-400 text-[10px] uppercase'>Hora</p>
-                                    <p class='font-bold text-primary-600'>{$hora}</p>
-                                </div>
-                                <div class='col-span-2'>
-                                    <p class='text-gray-400 text-[10px] uppercase'>Observación</p>
-                                    <p class='italic text-gray-600 truncate text-xs'>\"{$this->lastRecord->observation}\"</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ");
+                                                <div class='flex-1 min-w-0 px-2'>
+                                                    <div class='mb-1'>
+                                                        <span class='text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-success-500/10 text-success-600 rounded-full'>
+                                                            Entrada Confirmada
+                                                        </span>
+                                                    </div>
+                                                    <h2 class='text-xl font-bold text-gray-900 dark:text-white truncate'>
+                                                        {$p->name} {$p->last_name}
+                                                    </h2>
+                                                    <div class='grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-sm'>
+                                                        <div>
+                                                            <p class='text-gray-400 text-[10px] uppercase'>Cédula</p>
+                                                            <p class='font-medium'>{$p->document}</p>
+                                                        </div>
+                                                        <div>
+                                                            <p class='text-gray-400 text-[10px] uppercase'>Hora</p>
+                                                            <p class='font-bold text-primary-600'>{$hora}</p>
+                                                        </div>
+                                                        <div class='col-span-2'>
+                                                            <p class='text-gray-400 text-[10px] uppercase'>Observación</p>
+                                                            <p class='italic text-gray-600 truncate text-xs'>\"{$this->lastRecord->observation}\"</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ");
                                     })
                             ])
                     ]),
