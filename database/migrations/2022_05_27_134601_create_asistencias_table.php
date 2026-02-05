@@ -18,6 +18,7 @@ class CreateAsistenciasTable extends Migration
             $table->foreignId('id_personal')->constrained('personals')->onDelete('cascade');
             $table->date('day')->currentDate();
             $table->time('hour')->currentTime();
+            $table->text('observation')->nullable();
             $table->enum('record_type', ['HUELLA', 'MANUAL']);
         });
 

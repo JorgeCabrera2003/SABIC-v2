@@ -32,7 +32,7 @@ class PersonalFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'nominal_location' => fake()->city(), // O una ubicación de oficina
             'position' => fake()->jobTitle(),
-            'photo_dir' => 'fotos-personal/default.jpg', // Una ruta por defecto
+            'photo_dir' => 'fotos-personal/default.png', // Una ruta por defecto
             'status' => fake()->randomElement(['active', 'inactive', 'vacation', 'authorized', 'unauthorized']), // Según tu enum
         ];
     }

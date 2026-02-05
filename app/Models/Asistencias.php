@@ -15,6 +15,7 @@ class Asistencias extends Model
         'id_personal',
         'day',
         'hour',
+        'observation',
         'record_type',
     ];
     

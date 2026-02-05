@@ -22,7 +22,7 @@ class CreatePersonalsTable extends Migration
             $table->string('email');
             $table->string('nominal_location');
             $table->string('position');
-            $table->string('photo_dir');
+            $table->string('photo_dir')->default('fotos-personal/default.png');
             $table->enum('status', ['active', 'inactive', 'vacation', 'authorized', 'unauthorized'])->default('active');
         });
     }
