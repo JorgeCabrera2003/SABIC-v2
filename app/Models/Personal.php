@@ -15,8 +15,8 @@ class Personal extends Model
         'last_name',
         'phone_number',
         'email',
-        'nominal_location',
-        'position',
+        'id_nominal_location',
+        'id_position',
         'photo_dir',
         'status', // Agregar este campo
     ];
