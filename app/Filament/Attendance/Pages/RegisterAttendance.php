@@ -40,9 +40,10 @@ class RegisterAttendance extends Page implements HasForms
 
     public function refreshLastRecord()
     {
-        $this->lastRecord = Asistencias::with('personal')
+        // Cargamos la asistencia con el personal y sus detalles
+        $this->lastRecord = Asistencias::with(['personal.position', 'personal.nominalLocation'])
             ->where('day', now()->toDateString())
-            ->latest('id') // El último creado
+            ->latest('hour')
             ->first();
     }
 
@@ -57,11 +58,18 @@ class RegisterAttendance extends Page implements HasForms
                             ->columnSpan(1)
                             ->schema([
                                 TextInput::make('document')
-                                    ->label('Cédula')
+                                    ->label('Número de Cédula')
                                     ->required()
+                                    ->autofocus()
                                     ->numeric()
-                                    ->autofocus() // El cursor inicia aquí siempre
-                                    ->placeholder('Ingrese documento...')
+                                    ->rule('digits_between:8,9')
+                                    ->extraInputAttributes([
+                                        'onkeydown' => 'if(event.key === "Enter") { $wire.registerAttendance(); event.preventDefault(); }'
+                                    ]) // 3. Llama a la función correcta y evita el recargo de página
+                                    ->validationMessages([
+                                        'required' => 'La cédula es obligatoria.',
+                                        'digits_between' => 'La cédula debe tener entre 8 y 9 dígitos.',
+                                    ])
                                     ->extraInputAttributes(['style' => 'font-size: 1.2rem; font-weight: bold;']),
 
                                 TextInput::make('observation')
@@ -83,64 +91,60 @@ class RegisterAttendance extends Page implements HasForms
                             ]),
 
                         // === COLUMNA DERECHA: FICHA DEL ÚLTIMO REGISTRO ===
-                        Section::make('Último Ingreso Registrado')
-                            ->columnSpan(2)
+                        Section::make('Último Registro')
+                            ->description('Información del trabajador procesado')
                             ->schema([
-                                Placeholder::make('display_last')
-                                    ->hiddenLabel()
+                                Placeholder::make('display_last_record')
+                                    ->label('')
                                     ->content(function () {
                                         if (!$this->lastRecord) {
-                                            return new HtmlString('
-                                                <div class="flex flex-col items-center justify-center p-10 text-gray-400 border-2 border-dashed border-gray-300 rounded-lg">
-                                                    <span class="text-lg">Esperando registro...</span>
-                                                </div>
-                                            ');
+                                            return new HtmlString('<div class="text-center py-4 text-gray-400 italic">No hay registros hoy</div>');
                                         }
 
                                         $p = $this->lastRecord->personal;
-                                        $fotoPath = $p->photo_dir ?: 'fotos-personal/default.png';
-                                        $fotoUrl = asset('storage/' . $fotoPath);
+                                        $photo = $p->photo_dir ? asset('storage/' . $p->photo_dir) : asset('img/default.png');
 
-                                        $hora = \Carbon\Carbon::parse($this->lastRecord->hour)->format('h:i A');
+                                        // Formatear hora de entrada
+                                        $hora = date('h:i A', strtotime($this->lastRecord->hour));
 
                                         return new HtmlString("
-                                            <div class='flex flex-col md:flex-row gap-4 items-center bg-white dark:bg-gray-800 p-2 rounded-xl border border-gray-100 dark:border-gray-700'>
+                                            <div class='flex items-center gap-5 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm'>
                                                 
-                                                <div class='w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg shadow-sm border-2 border-primary-500'>
-                                                    <img src='{$fotoUrl}' 
-                                                        class='w-full h-full object-cover' 
-                                                        style='aspect-ratio: 1/1;'
-                                                        alt='Foto de {$p->name}'>
+                                                <div class='relative w-1/2 h-1/2 mr-4' style='margin-right: 1rem;'>
+                                                    <img src='{$photo}' class='w-full h-full rounded-xl object-cover border-2 border-gray-100 dark:border-gray-600 shadow-sm' />
                                                 </div>
 
-                                                <div class='flex-1 min-w-0 px-2'>
-                                                    <div class='mb-1'>
-                                                        <span class='text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-success-500/10 text-success-600 rounded-full'>
-                                                            Entrada Confirmada
-                                                        </span>
+                                                <div class='flex-1 min-w-0'> <div class='flex justify-between items-start ml-2'>
+                                                        <div>
+                                                            <h3 class='text-lg font-bold text-gray-900 dark:text-white truncate'>{$p->name} {$p->last_name}</h3>
+                                                            <p class='text-lg font-mono text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded inline-block mb-2'>
+                                                                CI: {$p->document}
+                                                            </p>
+                                                        </div>
+                                                        
+                                                        <div class='text-right'>
+                                                            <p class='text-xl font-black text-green-600 leading-none'>{$hora}</p>
+                                                            <p class='text-[10px] text-gray-400 uppercase font-bold tracking-wider'>Entrada</p>
+                                                        </div>
                                                     </div>
-                                                    <h2 class='text-xl font-bold text-gray-900 dark:text-white truncate'>
-                                                        {$p->name} {$p->last_name}
-                                                    </h2>
-                                                    <div class='grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-sm'>
+
+                                                    <hr class='my-2 border-gray-100 dark:border-gray-700'>
+
+                                                    <div class='grid grid-cols-2 gap-4 text-sm'>
                                                         <div>
-                                                            <p class='text-gray-400 text-[10px] uppercase'>Cédula</p>
-                                                            <p class='font-medium'>{$p->document}</p>
+                                                            <p class='text-[10px] text-gray-400 uppercase font-bold'>Cargo</p>
+                                                            <p class='font-medium text-gray-700 dark:text-gray-300 truncate'>" . ($p->position->name ?? '---') . "</p>
                                                         </div>
                                                         <div>
-                                                            <p class='text-gray-400 text-[10px] uppercase'>Hora</p>
-                                                            <p class='font-bold text-primary-600'>{$hora}</p>
-                                                        </div>
-                                                        <div class='col-span-2'>
-                                                            <p class='text-gray-400 text-[10px] uppercase'>Observación</p>
-                                                            <p class='italic text-gray-600 truncate text-xs'>\"{$this->lastRecord->observation}\"</p>
+                                                            <p class='text-[10px] text-gray-400 uppercase font-bold'>Ubicación</p>
+                                                            <p class='font-medium text-gray-700 dark:text-gray-300 truncate'>" . ($p->nominalLocation->name ?? '---') . "</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         ");
                                     })
-                            ])
+                            ])->columnSpan(2)
                     ]),
             ])
             ->statePath('data');
@@ -184,6 +188,21 @@ class RegisterAttendance extends Page implements HasForms
                 ->send();
 
             $this->form->fill(['document' => '']); // Limpiar para el siguiente
+            return;
+        }
+
+        // 2. Buscar al empleado
+        $empleado = Asistencias::where('id_personal', $empleado->id)->where('day', now()->toDateString())->first();
+
+        if ($empleado) {
+            Notification::make()
+                ->title('Ya registrado')
+                ->body("El trabajador ya registró su entrada hoy.")
+                ->danger()
+                ->persistent() // Se queda hasta que lo cierres
+                ->send();
+
+            // Enfocar de nuevo para corregir
             return;
         }
 
