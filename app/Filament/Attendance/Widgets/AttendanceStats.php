@@ -15,7 +15,7 @@ class AttendanceStats extends BaseWidget
         $today = now()->toDateString();
         
         $todayCount = Asistencias::where('day', $today)->count();
-        $totalEmployees = Personal::count();
+        $totalEmployees = Personal::where('status', 'active')->orWhere('status', 'authorized')->count();
         
         return [
             Stat::make('Registros Hoy', $todayCount)
