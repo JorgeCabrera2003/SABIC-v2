@@ -98,9 +98,9 @@ class PersonalResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nominal_location')
+                Tables\Columns\TextColumn::make('nominal_location.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('position')
+                Tables\Columns\TextColumn::make('position.name')
                     ->searchable(),
             ])
             ->filters([
