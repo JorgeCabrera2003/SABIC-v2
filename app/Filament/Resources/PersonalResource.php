@@ -95,22 +95,28 @@ class PersonalResource extends Resource
             ->columns([
                 ImageColumn::make('photo_dir')
                     ->searchable()
+                    ->label('Foto')
                     ->circular(),
                 Tables\Columns\TextColumn::make('document')
                     ->numeric()
+                    ->label('Cédula')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombres')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('last_name')
+                    ->label('Apellidos')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone_number')
+                    ->label('Teléfono')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('Correo Electrónico')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nominalLocation.name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('position.name')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('nominalLocation.name')
+                //     ->searchable(),
+                // Tables\Columns\TextColumn::make('position.name')
+                //     ->searchable(),
             ])
             ->filters([
                 //
