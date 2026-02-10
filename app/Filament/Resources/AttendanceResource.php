@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AsistenciasResource\Pages;
-use App\Filament\Resources\AsistenciasResource\RelationManagers;
-use App\Models\Asistencias;
+use App\Filament\Resources\AttendanceResource\Pages;
+use App\Filament\Resources\AttendanceResource\RelationManagers;
+use App\Models\Attendance;
+use App\Models\Personal;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +14,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AsistenciasResource extends Resource
+class AttendanceResource extends Resource
 {
-    protected static ?string $model = Asistencias::class;
+    protected static ?string $model = Attendance::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -45,39 +46,34 @@ class AsistenciasResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id_empleado')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('personal.name')
+                    ->label('Empleado')
+                    ->formatStateUsing(function ($record) {
+                        return "{$record->personal->name} {$record->personal->last_name}";
+                    })
+                    ->searchable(['name', 'last_name'])
                     ->sortable(),
-                Tables\Columns\TextColumn::make('dia')
+                Tables\Columns\TextColumn::make('day')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('hora'),
-                Tables\Columns\TextColumn::make('tipo_registro')
+                Tables\Columns\TextColumn::make('hour')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('record_type')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('foto_dir')
+                Tables\Columns\TextColumn::make('observation')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nota')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
+            ])->recordUrl(null);;
     }
 
     public static function getRelations(): array
@@ -90,9 +86,14 @@ class AsistenciasResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAsistencias::route('/'),
-            'create' => Pages\CreateAsistencias::route('/create'),
-            'edit' => Pages\EditAsistencias::route('/{record}/edit'),
+            'index' => Pages\ListAttendance::route('/'),
+            'create' => Pages\CreateAttendance::route('/create'),
+            'edit' => Pages\EditAttendance::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 }
