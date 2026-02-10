@@ -45,15 +45,36 @@ class PersonalResource extends Resource
                         Forms\Components\TextInput::make('document')
                             ->label('Cédula de Identidad')
                             ->required()
-                            ->numeric()
-                            ->columnSpan(1), // Ocupa una columna
+                            ->mask('999999999')
+                            ->placeholder('Ej: 123456789')
+                            ->length(9)
+                            ->regex('/^[0-9]+$/')
+                            ->unique(ignoreRecord: true)
+                            ->validationMessages([
+                                'length' => 'La cédula debe tener exactamente 9 dígitos.',
+                                'regex' => 'La cédula solo puede contener números.',
+                                'unique' => 'Esta cédula ya está registrada.',
+                            ]),
+
                         Forms\Components\TextInput::make('name')
                             ->label('Nombres')
-                            ->required(),
+                            ->required()
+                            ->maxLength(20) // Límite de 20 caracteres
+                            ->regex('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/') // Solo letras y espacios
+                            ->validationMessages([
+                                'regex' => 'El nombre solo puede contener letras.',
+                                'max' => 'El nombre no puede exceder los 20 caracteres.',
+                            ]),
+
                         Forms\Components\TextInput::make('last_name')
                             ->label('Apellidos')
-                            ->required(),
-                        // ]),
+                            ->required()
+                            ->maxLength(20) // Límite de 20 caracteres
+                            ->regex('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/') // Solo letras y espacios
+                            ->validationMessages([
+                                'regex' => 'El apellido solo puede contener letras.',
+                                'max' => 'El apellido no puede exceder los 20 caracteres.',
+                            ]),
                     ])->columns(3),
 
                 Section::make('Contacto y Cargo')
@@ -61,16 +82,28 @@ class PersonalResource extends Resource
                         Forms\Components\TextInput::make('phone_number')
                             ->label('Teléfono')
                             ->tel()
-                            ->required(),
+                            ->mask('0000-0000000')
+                            ->placeholder('0412-1234567')
+                            ->required()
+                            // Nota: La máscara ya controla la longitud visualmente
+                            ->maxLength(20),
+
                         Forms\Components\TextInput::make('email')
                             ->label('Correo Electrónico')
                             ->email()
-                            ->required(),
+                            ->required()
+                            ->maxLength(50) // Límite solicitado de 50 caracteres
+                            ->validationMessages([
+                                'email' => 'El formato del correo no es válido.',
+                                'max' => 'El correo no puede exceder los 50 caracteres.',
+                            ]),
+
                         Forms\Components\Select::make('id_nominal_location')
                             ->label('Ubicación Nominal')
                             ->options(NominalLocation::query()->pluck('name', 'id'))
                             ->searchable()
                             ->required(),
+
                         Forms\Components\Select::make('id_position')
                             ->label('Cargo Actual')
                             ->options(Position::query()->pluck('name', 'id'))
@@ -84,7 +117,8 @@ class PersonalResource extends Resource
                         FileUpload::make('photo_dir')
                             ->label('Foto de Perfil')
                             ->image()
-                            ->directory('fotos-personal'),
+                            ->directory('fotos-personal')
+                            ->required(),
                     ])->columns(1),
             ]);
     }
