@@ -19,6 +19,15 @@ class NominalLocationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
+        // Cambia el nombre en el menú lateral
+    protected static ?string $navigationLabel = 'Ubicaciones Nominales';
+
+    // Cambia el título en la lista (plural)
+    protected static ?string $pluralLabel = 'Ubicaciones Nominales';
+
+    // Cambia el título en el formulario de creación/edición (singular)
+    protected static ?string $modelLabel = 'Ubicación Nominal';
+
     public static function form(Form $form): Form
 {
     return $form
@@ -30,14 +39,14 @@ class NominalLocationResource extends Resource
                         ->label('Nombre de la Ubicación')
                         ->required()
                         ->unique(ignoreRecord: true) // Evita nombres duplicados
-                        ->maxLength(20  )
+                        ->maxLength(20          )
                         // Regex: Permite letras, números, espacios, puntos y guiones
                         ->regex('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.\-]+$/')
                         ->placeholder('Ej: Sede Principal o Almacén Central')
                         ->validationMessages([
                             'unique' => 'Esta ubicación ya está registrada.',
                             'regex' => 'El nombre solo puede contener letras, números, espacios, puntos o guiones.',
-                            'max' => 'El nombre no debe exceder los 20   caracteres.',
+                            'max' => 'El nombre no debe exceder los 20           caracteres.',
                         ]),
 
                     Forms\Components\TextInput::make('floor')
