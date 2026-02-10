@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PersonalResource\Pages;
 use App\Filament\Resources\PersonalResource\RelationManagers;
+use App\Models\NominalLocation;
 use App\Models\Personal;
+use App\Models\Position;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -21,10 +23,15 @@ use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Section as InfoSection;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Forms\Components\Select;
 
 class PersonalResource extends Resource
 {
     protected static ?string $model = Personal::class;
+
+    protected static ?string $modelPosition = Position::class;
+
+    protected static ?string $modelNominalLocation = NominalLocation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
@@ -40,15 +47,13 @@ class PersonalResource extends Resource
                             ->required()
                             ->numeric()
                             ->columnSpan(1), // Ocupa una columna
-                        // Grid::make(2) // Una rejilla de 2 columnas dentro de la sección
-                        //     ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->label('Nombres')
-                                    ->required(),
-                                Forms\Components\TextInput::make('last_name')
-                                    ->label('Apellidos')
-                                    ->required(),
-                            // ]),
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nombres')
+                            ->required(),
+                        Forms\Components\TextInput::make('last_name')
+                            ->label('Apellidos')
+                            ->required(),
+                        // ]),
                     ])->columns(3),
 
                 Section::make('Contacto y Cargo')
@@ -61,11 +66,15 @@ class PersonalResource extends Resource
                             ->label('Correo Electrónico')
                             ->email()
                             ->required(),
-                        Forms\Components\TextInput::make('nominal_location')
+                        Forms\Components\Select::make('id_nominal_location')
                             ->label('Ubicación Nominal')
+                            ->options(NominalLocation::query()->pluck('name', 'id'))
+                            ->searchable()
                             ->required(),
-                        Forms\Components\TextInput::make('position')
+                        Forms\Components\Select::make('id_position')
                             ->label('Cargo Actual')
+                            ->options(Position::query()->pluck('name', 'id'))
+                            ->searchable()
                             ->required(),
                     ])->columns(2),
 
@@ -98,7 +107,7 @@ class PersonalResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nominal_location.name')
+                Tables\Columns\TextColumn::make('nominalLocation.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('position.name')
                     ->searchable(),
@@ -135,16 +144,17 @@ class PersonalResource extends Resource
                             ->label('Apellidos'),
                     ])->columns(2),
 
-                InfoSection::make('Documentación Adjunta')
+                InfoSection::make('Detalles de Contacto y Cargo')
                     ->schema([
-                        TextEntry::make('curriculo_dir')
-                            ->label('Currículo Vitae')
-                            ->formatStateUsing(fn() => 'Abrir documento PDF')
-                            ->color('primary')
-                            ->icon('heroicon-o-document-arrow-down')
-                            ->url(fn($record) => asset('storage/' . $record->curriculo_dir), shouldOpenInNewTab: true)
-                            ->visible(fn($record) => !empty($record->curriculo_dir)),
-                    ]),
+                        TextEntry::make('phone_number')
+                            ->label('Teléfono'),
+                        TextEntry::make('email')
+                            ->label('Correo Electrónico'),
+                        TextEntry::make('nominalLocation.name')
+                            ->label('Ubicación Nominal'),
+                        TextEntry::make('position.name')
+                            ->label('Cargo Actual'),
+                    ])->columns(2),
             ]);
     }
 
