@@ -19,6 +19,17 @@ class PositionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    protected static ?string $navigationGroup = 'Gestión de Personal';
+
+    // Cambia el nombre en el menú lateral
+    protected static ?string $navigationLabel = 'Cargos';
+
+    // Cambia el título en la lista (plural)
+    protected static ?string $pluralLabel = 'Cargos';
+
+    // Cambia el título en el formulario de creación/edición (singular)
+    protected static ?string $modelLabel = 'Cargo';
+
     public static function form(Form $form): Form
     {
         return $form

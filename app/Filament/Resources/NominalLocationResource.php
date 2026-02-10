@@ -28,6 +28,8 @@ class NominalLocationResource extends Resource
     // Cambia el título en el formulario de creación/edición (singular)
     protected static ?string $modelLabel = 'Ubicación Nominal';
 
+    protected static ?string $navigationGroup = 'Gestión de Personal';
+
     public static function form(Form $form): Form
 {
     return $form
