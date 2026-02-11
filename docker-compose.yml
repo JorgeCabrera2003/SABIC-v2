@@ -1,0 +1,71 @@
+services:
+  sabic_app:
+    container_name: sabic_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www:z
+    ports:
+      - "7040:80"
+    networks:
+      - sabic_net
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - path: .env
+        required: true
+    depends_on:
+      - mysql
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/up"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "3"
+          memory: 999M
+        reservations:
+          cpus: "3"
+          memory: 700M
+
+  mysql:
+    image: mysql:8.0
+    container_name: sabic_mysql
+    restart: always
+    ports:
+      - "3346:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: sabic_db
+    volumes:
+      - mysql_sabic_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - sabic_net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sabic_phpmyadmin
+    depends_on:
+      - mysql
+    ports:
+      - "8041:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: rootpassword
+    networks:
+      - sabic_net
+
+networks:
+  sabic_net:
+    driver: bridge
+
+volumes:
+  mysql_sabic_data:
