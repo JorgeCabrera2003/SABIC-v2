@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarFullyCollapsibleOnDesktop()
             ->brandName('SABIC')
             ->favicon(asset('favicon.png'))
-            ->brandLogo(fn () => new HtmlString('<div class="flex items-center"><img src="'.asset('favicon.png').'" alt="SABIC" class="mr-2" style="height:1.5rem;"/><span style="margin-left: 5px;">SABIC</span></div>'))
+            ->brandLogo(fn() => new HtmlString('<div class="flex items-center"><img src="' . asset('favicon.png') . '" alt="SABIC" class="mr-2" style="height:1.5rem;"/><span style="margin-left: 5px;">SABIC</span></div>'))
             ->id('admin')
             ->path('admin')
             ->login()
@@ -57,9 +57,9 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-             ->plugins([
-                //\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
-            ])
+            // ->plugins([
+            //     //\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+            // ])
             ->authMiddleware([
                 Authenticate::class,
             ]);

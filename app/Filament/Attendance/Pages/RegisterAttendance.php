@@ -3,7 +3,7 @@
 namespace App\Filament\Attendance\Pages;
 
 use App\Models\Personal;
-use App\Models\Asistencias;
+use App\Models\Attendance;
 use Filament\Pages\Page;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
@@ -29,7 +29,7 @@ class RegisterAttendance extends Page implements HasForms
 
     public ?array $data = [];
 
-    public ?Asistencias $lastRecord = null;
+    public ?Attendance $lastRecord = null;
 
     public function mount(): void
     {
@@ -41,7 +41,7 @@ class RegisterAttendance extends Page implements HasForms
     public function refreshLastRecord()
     {
         // Cargamos la asistencia con el personal y sus detalles
-        $this->lastRecord = Asistencias::with(['personal.position', 'personal.nominalLocation'])
+        $this->lastRecord = Attendance::with(['personal.position', 'personal.nominalLocation'])
             ->where('day', now()->toDateString())
             ->latest('hour')
             ->first();
@@ -192,7 +192,7 @@ class RegisterAttendance extends Page implements HasForms
         }
 
         // 2. Buscar al empleado
-        $empleado = Asistencias::where('id_personal', $empleado->id)->where('day', now()->toDateString())->first();
+        $empleado = Attendance::where('id_personal', $empleado->id)->where('day', now()->toDateString())->first();
 
         if ($empleado) {
             Notification::make()
@@ -209,7 +209,7 @@ class RegisterAttendance extends Page implements HasForms
         // 3. Registrar Asistencia
         DB::beginTransaction();
         try {
-            Asistencias::create([
+            Attendance::create([
                 'id_personal' => $empleado->id,
                 'day' => now()->toDateString(),
                 'hour' => now()->toTimeString(),

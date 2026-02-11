@@ -2,7 +2,7 @@
 
 namespace App\Filament\Attendance\Widgets;
 
-use App\Models\Asistencias;
+use App\Models\Attendance;
 use App\Models\Personal;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -14,7 +14,7 @@ class AttendanceStats extends BaseWidget
     {
         $today = now()->toDateString();
         
-        $todayCount = Asistencias::where('day', $today)->count();
+        $todayCount = Attendance::where('day', $today)->count();
         $totalEmployees = Personal::where('status', 'active')->orWhere('status', 'authorized')->count();
         
         return [

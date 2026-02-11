@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use BezhanSalleh\PanelSwitch\PanelSwitch;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
+            $panelSwitch->simple()
+                ->labels([
+                    'admin' => 'Administración',
+                    'attendance' => 'Asistencia',
+                ])
+                ->icons([
+                    'admin' => 'heroicon-o-square-2-stack',
+                    'attendance' => 'heroicon-o-clock',
+                ]);
+        });
     }
 }
