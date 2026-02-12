@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(fn() => new HtmlString('<div class="flex items-center"><img src="' . asset('favicon.png') . '" alt="SABIC" class="mr-2" style="height:1.5rem;"/><span style="margin-left: 5px;">SABIC</span></div>'))
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Pages\Auth\Login::class)
             ->colors([
                 'primary' => Color::Yellow,
             ])
