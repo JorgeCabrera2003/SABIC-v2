@@ -17,9 +17,11 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\DB;
 
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+
 class RegisterAttendance extends Page implements HasForms
 {
-    use InteractsWithForms;
+    use InteractsWithForms, HasPageShield;
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $navigationLabel = 'Marcar Asistencia';
