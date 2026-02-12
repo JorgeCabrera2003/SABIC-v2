@@ -66,7 +66,8 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationGroup('Administración del Sistema')
                     ->navigationLabel('Papelera de Reciclaje')
                     ->title('Papelera de Reciclaje'),
-                \Yebor974\Filament\RenewPassword\RenewPasswordPlugin::make(),
+                \Yebor974\Filament\RenewPassword\RenewPasswordPlugin::make()
+                    ->forceRenewPassword(),
             ])
             ->authMiddleware([
                 Authenticate::class,

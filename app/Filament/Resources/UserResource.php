@@ -50,6 +50,9 @@ class UserResource extends Resource
                     ->maxItems(1)
                     ->preload()
                     ->searchable(),
+                Forms\Components\Toggle::make('force_renew_password')
+                    ->label('Forzar cambio de contraseña')
+                    ->helperText('Si se activa, el usuario deberá cambiar su contraseña en el próximo inicio de sesión.'),
             ]);
     }
 
@@ -72,6 +75,10 @@ class UserResource extends Resource
                         'comedor' => 'success',
                         default => 'gray',
                     }),
+                Tables\Columns\IconColumn::make('force_renew_password')
+                    ->label('Forzar cambio')
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

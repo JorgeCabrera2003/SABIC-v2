@@ -12,9 +12,12 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Promethys\FilamentRevive\Concerns\Recyclable;
 
-class User extends Authenticatable
+use Yebor974\Filament\RenewPassword\Contracts\RenewPasswordContract;
+use Yebor974\Filament\RenewPassword\Traits\RenewPassword;
+
+class User extends Authenticatable implements RenewPasswordContract
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, Recyclable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, Recyclable, RenewPassword;
 
     /**
      * The attributes that are mass assignable.
