@@ -60,11 +60,18 @@ class RegisterAttendance extends Page implements HasForms
                             ->columnSpan(1)
                             ->schema([
                                 TextInput::make('document')
-                                    ->label('Número de Cédula')
+                                    ->label('Cédula de Identidad')
                                     ->required()
-                                    ->autofocus()
-                                    ->numeric()
-                                    ->rule('digits_between:8,9')
+                                    ->mask('999999999')
+                                    ->placeholder('Ej: 123456789')
+                                    ->length(9)
+                                    ->regex('/^[0-9]+$/')
+                                    ->unique(ignoreRecord: true)
+                                    ->validationMessages([
+                                        'length' => 'La cédula debe tener exactamente 9 dígitos.',
+                                        'regex' => 'La cédula solo puede contener números.',
+                                        'unique' => 'Esta cédula ya está registrada.',
+                                    ])
                                     ->extraInputAttributes([
                                         'onkeydown' => 'if(event.key === "Enter") { $wire.registerAttendance(); event.preventDefault(); }'
                                     ]) // 3. Llama a la función correcta y evita el recargo de página

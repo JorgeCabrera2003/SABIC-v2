@@ -5,8 +5,6 @@ namespace App\Filament\Pages\Auth;
 use Filament\Pages\Auth\Login as BaseLogin;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\HtmlString;
 
 class Login extends BaseLogin
 {
@@ -16,7 +14,7 @@ class Login extends BaseLogin
             'form' => $this->form(
                 $this->makeForm()
                     ->schema([
-                        $this->getEmailFormComponent(),
+                        $this->getEmailFormComponent(), 
                         $this->getPasswordFormComponent(),
                         $this->getRememberFormComponent(),
                     ])
@@ -27,7 +25,7 @@ class Login extends BaseLogin
 
     protected function getEmailFormComponent(): Component
     {
-        return TextInput::make('username')
+        return TextInput::make('name') 
             ->label('Nombre de usuario')
             ->required()
             ->autocomplete()
@@ -38,8 +36,8 @@ class Login extends BaseLogin
     protected function getCredentialsFromFormData(array $data): array
     {
         return [
-            'username' => $data['username'],
-            'password'  => $data['password'],
+            'name'     => $data['name'],
+            'password' => $data['password'],
         ];
     }
 }
