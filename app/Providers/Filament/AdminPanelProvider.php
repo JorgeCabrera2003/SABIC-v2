@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                \App\Filament\Pages\RecycleBin::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -57,9 +58,16 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            // ->plugins([
-            //     //\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
-            // ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                (new class extends \Promethys\FilamentRevive\FilamentRevivePlugin{
+            protected string $recycleBin = \App\Filament\Pages\RecycleBin::class;
+                })
+                    ->navigationGroup('Administración del Sistema')
+                    ->navigationLabel('Papelera de Reciclaje')
+                    ->title('Papelera de Reciclaje'),
+                \Yebor974\Filament\RenewPassword\RenewPasswordPlugin::make(),
+            ])
             ->authMiddleware([
                 Authenticate::class,
             ]);

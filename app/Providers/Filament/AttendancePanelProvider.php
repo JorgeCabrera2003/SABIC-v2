@@ -34,7 +34,7 @@ class AttendancePanelProvider extends PanelProvider
             ->pages([
                 \App\Filament\Attendance\Pages\AttendanceDashboard::class,
             ])
-            ->homeUrl(fn (): string => url('/attendance/register-attendance'))
+            ->homeUrl(fn(): string => url('/attendance/register-attendance'))
             ->discoverWidgets(in: app_path('Filament/Attendance/Widgets'), for: 'App\\Filament\\Attendance\\Widgets')
             ->widgets([
                 // Widgets personalizados para la asistencia
@@ -51,12 +51,12 @@ class AttendancePanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                // Comentar o eliminar esta línea para hacerlo público
-                // Authenticate::class,
+                    // Comentar o eliminar esta línea para hacerlo público
+                Authenticate::class,
             ])
-            //->plugins([
-            //    \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
-            //])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+            ])
             ->topNavigation() // Navegación superior para mejor UX
             ->sidebarCollapsibleOnDesktop(false); // Sidebar siempre visible
     }
