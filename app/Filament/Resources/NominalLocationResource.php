@@ -19,7 +19,7 @@ class NominalLocationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
-        // Cambia el nombre en el menú lateral
+    // Cambia el nombre en el menú lateral
     protected static ?string $navigationLabel = 'Ubicaciones Nominales';
 
     // Cambia el título en la lista (plural)
@@ -31,39 +31,39 @@ class NominalLocationResource extends Resource
     protected static ?string $navigationGroup = 'Gestión de Personal';
 
     public static function form(Form $form): Form
-{
-    return $form
-        ->schema([
-            Forms\Components\Section::make('Ubicación Física / Nominal')
-                ->description('Especifique el nombre de la sede y el nivel correspondiente.')
-                ->schema([
-                    Forms\Components\TextInput::make('name')
-                        ->label('Nombre de la Ubicación')
-                        ->required()
-                        ->unique(ignoreRecord: true) // Evita nombres duplicados
-                        ->maxLength(20          )
-                        // Regex: Permite letras, números, espacios, puntos y guiones
-                        ->regex('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.\-]+$/')
-                        ->placeholder('Ej: Sede Principal o Almacén Central')
-                        ->validationMessages([
-                            'unique' => 'Esta ubicación ya está registrada.',
-                            'regex' => 'El nombre solo puede contener letras, números, espacios, puntos o guiones.',
-                            'max' => 'El nombre no debe exceder los 20           caracteres.',
-                        ]),
+    {
+        return $form
+            ->schema([
+                Forms\Components\Section::make('Ubicación Física / Nominal')
+                    ->description('Especifique el nombre de la sede y el nivel correspondiente.')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nombre de la Ubicación')
+                            ->required()
+                            ->unique(ignoreRecord: true) // Evita nombres duplicados
+                            ->maxLength(20)
+                            // Regex: Permite letras, números, espacios, puntos y guiones
+                            ->regex('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.\-]+$/')
+                            ->placeholder('Ej: Sede Principal o Almacén Central')
+                            ->validationMessages([
+                                'unique' => 'Esta ubicación ya está registrada.',
+                                'regex' => 'El nombre solo puede contener letras, números, espacios, puntos o guiones.',
+                                'max' => 'El nombre no debe exceder los 20           caracteres.',
+                            ]),
 
-                    Forms\Components\TextInput::make('floor')
-                        ->label('Piso o Nivel')
-                        ->maxLength(50)
-                        ->placeholder('Ej: Planta Baja / Piso 2 / Sótano')
-                        // Regex: Alfanumérico simple
-                        ->regex('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.]+$/')
-                        ->validationMessages([
-                            'regex' => 'El formato del piso no es válido.',
-                            'max' => 'Este campo no debe exceder los 50 caracteres.',
-                        ]),
-                ])->columns(2),
-        ]);
-}
+                        Forms\Components\TextInput::make('floor')
+                            ->label('Piso o Nivel')
+                            ->maxLength(50)
+                            ->placeholder('Ej: Planta Baja / Piso 2 / Sótano')
+                            // Regex: Alfanumérico simple
+                            ->regex('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'El formato del piso no es válido.',
+                                'max' => 'Este campo no debe exceder los 50 caracteres.',
+                            ]),
+                    ])->columns(2),
+            ]);
+    }
 
     public static function table(Table $table): Table
     {
@@ -77,15 +77,19 @@ class NominalLocationResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -104,5 +108,13 @@ class NominalLocationResource extends Resource
             'create' => Pages\CreateNominalLocation::route('/create'),
             'edit' => Pages\EditNominalLocation::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

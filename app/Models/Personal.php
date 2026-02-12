@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Promethys\FilamentRevive\Concerns\Recyclable;
+
 class Personal extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, Recyclable;
 
     protected $fillable = [
         'document',
@@ -26,7 +29,7 @@ class Personal extends Model
     // Relación con Asistencias
     public function asistencias()
     {
-        return $this->hasMany(Asistencias::class, 'id_personal');
+        return $this->hasMany(Attendance::class, 'id_personal');
     }
 
     // Scope para empleados activos

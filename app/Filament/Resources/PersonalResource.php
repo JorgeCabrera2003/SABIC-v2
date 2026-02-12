@@ -34,9 +34,13 @@ class PersonalResource extends Resource
     protected static ?string $modelNominalLocation = NominalLocation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationLabel = 'Personal';
 
+    protected static ?string $pluralLabel = 'Personal';
+
+    protected static ?string $modelLabel = 'Personal';
     protected static ?string $navigationGroup = 'Gestión de Personal';
-    
+
 
     public static function form(Form $form): Form
     {
@@ -156,16 +160,20 @@ class PersonalResource extends Resource
                 //     ->searchable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -215,5 +223,13 @@ class PersonalResource extends Resource
             'create' => Pages\CreatePersonal::route('/create'),
             'edit' => Pages\EditPersonal::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

@@ -34,7 +34,7 @@ class BitacoraResource extends Resource
     // Cambia el título en el formulario de creación/edición (singular)
     protected static ?string $modelLabel = 'Bitacora';
 
-    protected static ?string $navigationGroup = 'Mantenimiento del Sistema';
+    protected static ?string $navigationGroup = 'Administración del Sistema';
 
     protected static ?int $navigationSort = 1;
 
@@ -93,14 +93,19 @@ class BitacoraResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ])->defaultSort('created_at', 'desc')->recordUrl(null);
     }
@@ -158,5 +163,13 @@ class BitacoraResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
