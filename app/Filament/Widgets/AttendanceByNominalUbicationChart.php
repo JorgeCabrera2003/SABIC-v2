@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class AttendanceByNominalUbicationChart extends ChartWidget
 {
-    protected int|string|array $columnSpan = 'full';
+    // protected int|string|array $columnSpan = 'full';
 
     protected static ?string $heading = 'Asistencias por Ubicación Nominal';
 
@@ -53,6 +53,7 @@ class AttendanceByNominalUbicationChart extends ChartWidget
                     'backgroundColor' => $colors,
                     'borderWidth' => 0,
                     'hoverOffset' => 12,
+                    'borderRadius' => 6,
                 ],
             ],
             'labels' => $labels,
@@ -70,27 +71,18 @@ class AttendanceByNominalUbicationChart extends ChartWidget
             'cutout' => '65%',
             'plugins' => [
                 'legend' => [
-                    'position' => 'bottom',
-                    'labels' => [
-                        'padding' => 16,
-                        'boxWidth' => 14,
-                        'font' => [
-                            'size' => 12,
-                        ],
-                    ],
+                    'display' => false,
+                    // 'position' => 'bottom',
+                    // 'labels' => [
+                    //     'padding' => 16,
+                    //     'boxWidth' => 14,
+                    //     'font' => [
+                    //         'size' => 12,
+                    //     ],
+                    // ],
                 ],
                 'tooltip' => [
-                    'backgroundColor' => '#111827',
-                    'padding' => 12,
-                    'callbacks' => [
-                        'label' => "function(context) {
-                        var label = context.label || '';
-                        var value = context.raw || 0;
-                        var total = context.dataset.data.reduce((a, b) => a + b, 0);
-                        var percentage = Math.round((value / total) * 100);
-                        return label + ': ' + value + ' (' + percentage + '%)';
-                    }",
-                    ],
+                    'enabled' => true,
                 ],
             ],
 

@@ -10,7 +10,7 @@ class AttendanceByTimeChart extends ChartWidget
 {
     protected static ?string $heading = 'Asistencias en los últimos 5 días';
 
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 2;
 
     protected function getData(): array
     {
@@ -37,7 +37,7 @@ class AttendanceByTimeChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Personas que marcaron asistencia',
+                    'label' => 'Personas asistentes',
                     'data' => $data,
                     'backgroundColor' => '#6366F1',
                     'borderRadius' => 6,
@@ -60,12 +60,7 @@ class AttendanceByTimeChart extends ChartWidget
                     'display' => false,
                 ],
                 'tooltip' => [
-                    'callbacks' => [
-                        'label' => "function(context) {
-                            var value = context.raw || 0;
-                            return value + ' asistencias';
-                        }",
-                    ],
+                    'enabled' => true,
                 ],
             ],
 
