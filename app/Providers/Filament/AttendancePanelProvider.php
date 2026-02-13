@@ -37,7 +37,7 @@ class AttendancePanelProvider extends PanelProvider
             ->homeUrl(fn(): string => url('/attendance/register-attendance'))
             ->discoverWidgets(in: app_path('Filament/Attendance/Widgets'), for: 'App\\Filament\\Attendance\\Widgets')
             ->widgets([
-                // Widgets personalizados para la asistencia
+                \app\Filament\Widgets\AttendanceByNominalUbicationChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -51,7 +51,6 @@ class AttendancePanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                    // Comentar o eliminar esta línea para hacerlo público
                 Authenticate::class,
             ])
             ->plugins([
