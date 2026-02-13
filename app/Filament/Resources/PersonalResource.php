@@ -150,16 +150,9 @@ class PersonalResource extends Resource
                 Tables\Columns\TextColumn::make('last_name')
                     ->label('Apellidos')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone_number')
-                    ->label('Teléfono')
+                Tables\Columns\TextColumn::make('nominalLocation.name')
+                    ->label('Ubicación Nominal')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->label('Correo Electrónico')
-                    ->searchable(),
-                // Tables\Columns\TextColumn::make('nominalLocation.name')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('position.name')
-                //     ->searchable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
