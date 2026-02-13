@@ -23,7 +23,7 @@ class CreatePersonalsTable extends Migration
             $table->string('email');
             $table->foreignId('id_nominal_location')->constrained('nominal_location')->onDelete('cascade');
             $table->foreignId('id_position')->constrained('position')->onDelete('cascade');
-            $table->string('photo_dir')->default('fotos-personal/default.png');
+            $table->string('photo_dir')->default('default.png');
             $table->enum('status', ['active', 'inactive', 'vacation', 'authorized', 'unauthorized'])->default('active');
         });
 

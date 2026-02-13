@@ -32,7 +32,7 @@ class PersonalFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'id_nominal_location' => fake()->randomElement(\App\Models\NominalLocation::pluck('id')->toArray()),
             'id_position' => fake()->randomElement(\App\Models\Position::pluck('id')->toArray()),
-            'photo_dir' => 'fotos-personal/default.png', // Una ruta por defecto
+            'photo_dir' => 'default.png', // Una ruta por defecto
             'status' => fake()->randomElement(['active', 'inactive', 'vacation', 'authorized', 'unauthorized']), // Según tu enum
         ];
     }

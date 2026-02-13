@@ -107,7 +107,7 @@ class RegisterAttendance extends Page implements HasForms
                                         }
 
                                         $p = $this->lastRecord->personal;
-                                        $photo = $p->photo_dir ? asset('storage/' . $p->photo_dir) : asset('img/default.png');
+                                        $photo = $p->photo_dir ? asset('storage/'.$p->photo_dir) : asset('storage/default.png');
 
                                         // Formatear hora de entrada
                                         $hora = date('h:i A', strtotime($this->lastRecord->hour));
