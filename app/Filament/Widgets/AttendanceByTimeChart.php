@@ -40,6 +40,8 @@ class AttendanceByTimeChart extends ChartWidget
                     'label' => 'Personas asistentes',
                     'data' => $data,
                     'backgroundColor' => '#6366F1',
+                    'borderWidth' => 0,
+                    'hoverOffset' => 12,
                     'borderRadius' => 6,
                 ],
             ],
