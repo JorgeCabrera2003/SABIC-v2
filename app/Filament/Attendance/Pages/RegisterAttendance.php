@@ -2,29 +2,30 @@
 
 namespace App\Filament\Attendance\Pages;
 
-use App\Models\Personal;
 use App\Models\Attendance;
-use Filament\Pages\Page;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Section;
+use App\Models\Personal;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use Illuminate\Support\HtmlString;
+use Filament\Pages\Page;
 use Illuminate\Support\Facades\DB;
-
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use Illuminate\Support\HtmlString;
 
 class RegisterAttendance extends Page implements HasForms
 {
-    use InteractsWithForms, HasPageShield;
+    use HasPageShield, InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
+
     protected static ?string $navigationLabel = 'Marcar Asistencia';
+
     protected static ?string $title = 'Control de Acceso';
 
     protected static string $view = 'filament.attendance.pages.register-attendance';
@@ -75,7 +76,7 @@ class RegisterAttendance extends Page implements HasForms
                                         'unique' => 'Esta cédula ya está registrada.',
                                     ])
                                     ->extraInputAttributes([
-                                        'onkeydown' => 'if(event.key === "Enter") { $wire.registerAttendance(); event.preventDefault(); }'
+                                        'onkeydown' => 'if(event.key === "Enter") { $wire.registerAttendance(); event.preventDefault(); }',
                                     ]) // 3. Llama a la función correcta y evita el recargo de página
                                     ->extraInputAttributes(['style' => 'font-size: 1.2rem; font-weight: bold;']),
 
@@ -93,7 +94,7 @@ class RegisterAttendance extends Page implements HasForms
                                         ->color('primary')
                                         ->size('xl')
                                         ->extraAttributes(['class' => 'w-full justify-center py-3']) // Botón grande
-                                        ->action(fn() => $this->save()),
+                                        ->action(fn () => $this->save()),
                                 ]),
                             ]),
 
@@ -104,7 +105,7 @@ class RegisterAttendance extends Page implements HasForms
                                 Placeholder::make('display_last_record')
                                     ->label('')
                                     ->content(function () {
-                                        if (!$this->lastRecord) {
+                                        if (! $this->lastRecord) {
                                             return new HtmlString('<div class="text-center py-4 text-gray-400 italic">No hay registros hoy</div>');
                                         }
 
@@ -140,18 +141,18 @@ class RegisterAttendance extends Page implements HasForms
                                                     <div class='grid grid-cols-2 gap-4 text-sm'>
                                                         <div>
                                                             <p class='text-[10px] text-gray-400 uppercase font-bold'>Cargo</p>
-                                                            <p class='font-medium text-gray-700 dark:text-gray-300 truncate'>" . ($p->position->name ?? '---') . "</p>
+                                                            <p class='font-medium text-gray-700 dark:text-gray-300 truncate'>".($p->position->name ?? '---')."</p>
                                                         </div>
                                                         <div>
                                                             <p class='text-[10px] text-gray-400 uppercase font-bold'>Ubicación</p>
-                                                            <p class='font-medium text-gray-700 dark:text-gray-300 truncate'>" . ($p->nominalLocation->name ?? '---') . "</p>
+                                                            <p class='font-medium text-gray-700 dark:text-gray-300 truncate'>".($p->nominalLocation->name ?? '---').'</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        ");
-                                    })
-                            ])->columnSpan(2)
+                                        ');
+                                    }),
+                            ])->columnSpan(2),
                     ]),
             ])
             ->statePath('data');
@@ -167,7 +168,7 @@ class RegisterAttendance extends Page implements HasForms
         // 2. Buscar al empleado
         $empleado = Personal::where('document', $cedula)->first();
 
-        if (!$empleado) {
+        if (! $empleado) {
             Notification::make()
                 ->title('Personal no encontrado')
                 ->body("No existe empleado con la cédula: $cedula")
@@ -179,7 +180,7 @@ class RegisterAttendance extends Page implements HasForms
             return;
         }
 
-        if (!in_array($empleado->status, ['active', 'authorized'])) {
+        if (! in_array($empleado->status, ['active', 'authorized'])) {
             $statusLabel = match ($empleado->status) {
                 'inactive' => 'INACTIVO',
                 'vacation' => 'EN VACACIONES',
@@ -195,16 +196,17 @@ class RegisterAttendance extends Page implements HasForms
                 ->send();
 
             $this->form->fill(['document' => '']); // Limpiar para el siguiente
+
             return;
         }
 
         // 2. Buscar al empleado
-        $empleado = Attendance::where('id_personal', $empleado->id)->where('day', now()->toDateString())->first();
+        $exist = Attendance::where('id_personal', $empleado->id)->where('day', now()->toDateString())->first();
 
-        if ($empleado) {
+        if ($exist) {
             Notification::make()
                 ->title('Ya registrado')
-                ->body("El trabajador ya registró su entrada hoy.")
+                ->body('El trabajador ya registró su entrada hoy.')
                 ->danger()
                 ->persistent() // Se queda hasta que lo cierres
                 ->send();
@@ -237,7 +239,7 @@ class RegisterAttendance extends Page implements HasForms
             $this->refreshLastRecord(); // Recarga la ficha derecha
             $this->form->fill([
                 'document' => '',
-                'observation' => 'Entrada turno regular' // Dejar la obs por defecto lista para el siguiente
+                'observation' => 'Entrada turno regular', // Dejar la obs por defecto lista para el siguiente
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
