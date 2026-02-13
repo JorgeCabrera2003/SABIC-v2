@@ -64,7 +64,7 @@ class RegisterAttendance extends Page implements HasForms
                                     ->required()
                                     ->mask('999999999')
                                     ->placeholder('Ej: 123456789')
-                                    ->length(9)
+                                    ->length(8)
                                     ->regex('/^[0-9]+$/')
                                     ->unique(ignoreRecord: true)
                                     ->validationMessages([
@@ -75,10 +75,6 @@ class RegisterAttendance extends Page implements HasForms
                                     ->extraInputAttributes([
                                         'onkeydown' => 'if(event.key === "Enter") { $wire.registerAttendance(); event.preventDefault(); }'
                                     ]) // 3. Llama a la función correcta y evita el recargo de página
-                                    ->validationMessages([
-                                        'required' => 'La cédula es obligatoria.',
-                                        'digits_between' => 'La cédula debe tener entre 8 y 9 dígitos.',
-                                    ])
                                     ->extraInputAttributes(['style' => 'font-size: 1.2rem; font-weight: bold;']),
 
                                 TextInput::make('observation')
