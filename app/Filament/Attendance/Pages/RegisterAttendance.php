@@ -64,11 +64,13 @@ class RegisterAttendance extends Page implements HasForms
                                     ->required()
                                     ->mask('999999999')
                                     ->placeholder('Ej: 123456789')
-                                    ->length(8)
+                                    ->maxLength(9)
+                                    ->minLength(7)
                                     ->regex('/^[0-9]+$/')
                                     ->unique(ignoreRecord: true)
                                     ->validationMessages([
-                                        'length' => 'La cédula debe tener exactamente 9 dígitos.',
+                                        'maxLength' => 'La cédula debe tener máximo 9 dígitos.',
+                                        'minLength' => 'La cédula debe tener mínimo 7 dígitos.',
                                         'regex' => 'La cédula solo puede contener números.',
                                         'unique' => 'Esta cédula ya está registrada.',
                                     ])
