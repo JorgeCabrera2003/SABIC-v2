@@ -37,6 +37,7 @@ class AttendancePanelProvider extends PanelProvider
             ->homeUrl(fn(): string => url('/attendance/register-attendance'))
             ->discoverWidgets(in: app_path('Filament/Attendance/Widgets'), for: 'App\\Filament\\Attendance\\Widgets')
             ->widgets([
+                \App\Filament\Widgets\ClockWidget::class,
                 \App\Filament\Widgets\AttendanceStats::class,
                 \App\Filament\Widgets\AttendanceByNominalUbicationChart::class,
             ])
