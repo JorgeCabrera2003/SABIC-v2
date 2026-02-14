@@ -37,7 +37,8 @@ class AttendancePanelProvider extends PanelProvider
             ->homeUrl(fn(): string => url('/attendance/register-attendance'))
             ->discoverWidgets(in: app_path('Filament/Attendance/Widgets'), for: 'App\\Filament\\Attendance\\Widgets')
             ->widgets([
-                \app\Filament\Widgets\AttendanceByNominalUbicationChart::class,
+                \App\Filament\Widgets\AttendanceStats::class,
+                \App\Filament\Widgets\AttendanceByNominalUbicationChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -54,7 +55,7 @@ class AttendancePanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+                //\BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ])
             ->topNavigation() // Navegación superior para mejor UX
             ->sidebarCollapsibleOnDesktop(false); // Sidebar siempre visible

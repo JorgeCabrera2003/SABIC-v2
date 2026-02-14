@@ -11,7 +11,9 @@ class PersonalStats extends BaseWidget
 {
     use HasWidgetShield;
 
-    protected static ?int $sort = 2;
+    protected ?string $heading = 'Estadísticas de Personal';
+
+    protected static ?int $sort = 3;
 
     protected function getStats(): array
     {
@@ -38,17 +40,17 @@ class PersonalStats extends BaseWidget
                 ->description('Empleados inactivos')
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('info'),
-                
+
             Stat::make('Empleados de Vacaciones', $vacationEmployees)
                 ->description('Empleados de vacaciones')
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('info'),
-                
+
             Stat::make('Empleados Autorizados', $authorizedEmployees)
                 ->description('Empleados autorizados')
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('info'),
-                
+
             Stat::make('Empleados no Autorizados', $unauthorizedEmployees)
                 ->description('Empleados no autorizados')
                 ->descriptionIcon('heroicon-m-user-group')

@@ -14,6 +14,8 @@ class UserStasts extends BaseWidget
 {
     use HasWidgetShield;
 
+    protected ?string $heading = 'Estadísticas de Usuarios';
+
     protected static ?int $sort = 4;
 
     protected function getStats(): array
@@ -22,7 +24,7 @@ class UserStasts extends BaseWidget
         $today = now()->toDateString();
         $todayCount = Attendance::where('day', $today)->count();
         $totalEmployees = Personal::where('status', 'active')->orWhere('status', 'authorized')->count();
-        
+
         return [
             Stat::make('Usuarios Totales', \App\Models\User::count())
                 ->description('Registrados en la plataforma')
