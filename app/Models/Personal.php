@@ -26,19 +26,17 @@ class Personal extends Model
 
     public $timestamps = false;
 
-    // Relación con Asistencias
+
     public function asistencias()
     {
         return $this->hasMany(Attendance::class, 'id_personal');
     }
 
-    // Scope para empleados activos
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
     }
 
-    // Método para verificar si puede registrar asistencia
     public function canRegisterAttendance(): bool
     {
         $allowedStatuses = ['active', 'authorized'];
