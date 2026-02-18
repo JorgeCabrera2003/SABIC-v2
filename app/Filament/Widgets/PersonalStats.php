@@ -34,27 +34,27 @@ class PersonalStats extends BaseWidget
             Stat::make('Empleados Activos', $activeEmployees)
                 ->description('Empleados activos')
                 ->descriptionIcon('heroicon-m-user-group')
-                ->color('info'),
+                ->color('success'),
 
             Stat::make('Empleados Inactivos', $inactiveEmployees)
                 ->description('Empleados inactivos')
                 ->descriptionIcon('heroicon-m-user-group')
-                ->color('info'),
+                ->color('warning'),
 
             Stat::make('Empleados de Vacaciones', $vacationEmployees)
                 ->description('Empleados de vacaciones')
                 ->descriptionIcon('heroicon-m-user-group')
-                ->color('info'),
+                ->color('warning'),
 
             Stat::make('Empleados Autorizados', $authorizedEmployees)
                 ->description('Empleados autorizados')
                 ->descriptionIcon('heroicon-m-user-group')
-                ->color('info'),
+                ->color('success'),
 
             Stat::make('Empleados no Autorizados', $unauthorizedEmployees)
                 ->description('Empleados no autorizados')
                 ->descriptionIcon('heroicon-m-user-group')
-                ->color('info'),
+                ->color('success'),
         ];
     }
 }

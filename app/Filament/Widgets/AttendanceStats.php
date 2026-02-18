@@ -41,7 +41,7 @@ class AttendanceStats extends BaseWidget
             Stat::make('Registros Manuales', $manualCount)
                 ->description('Registros manuales del dia')
                 ->descriptionIcon('heroicon-m-pencil')
-                ->color('info'),
+                ->color('success'),
 
             Stat::make('Registros Por Huella', $fingerCount)
                 ->description('Registros por huella dactilar')

@@ -29,7 +29,7 @@ class UserStasts extends BaseWidget
             Stat::make('Usuarios Totales', \App\Models\User::count())
                 ->description('Registrados en la plataforma')
                 ->descriptionIcon('heroicon-m-users')
-                ->color('info'),
+                ->color('success'),
         ];
     }
 }
