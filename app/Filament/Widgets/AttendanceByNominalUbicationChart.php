@@ -5,10 +5,11 @@ namespace App\Filament\Widgets;
 use App\Models\Attendance;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class AttendanceByNominalUbicationChart extends ChartWidget
 {
-    // protected int|string|array $columnSpan = 'full';
+    use HasWidgetShield;
 
     protected static ?string $heading = 'Asistencias por Ubicación Nominal';
 
@@ -25,19 +26,20 @@ class AttendanceByNominalUbicationChart extends ChartWidget
             ->orderBy('total', 'desc')
             ->get();
 
-        $labels = $attendancesByLocation->pluck('name')->toArray();
+        $dateLabel = ucfirst(now()->locale('es')->translatedFormat('d \d\e F \d\e Y'));
+        $labels = $attendancesByLocation->map(fn() => $dateLabel)->toArray();
         $data = $attendancesByLocation->pluck('total')->toArray();
 
         if (empty($labels)) {
             $labels = ['Sin asistencias hoy'];
-            $data = [1];
+            $data = [0];
         }
 
         // 🎨 Paleta moderna (gradiente tipo dashboard profesional)
         $colors = [
+            '#F59E0B', // Amber
             '#6366F1', // Indigo
             '#22C55E', // Green
-            '#F59E0B', // Amber
             '#EF4444', // Red
             '#06B6D4', // Cyan
             '#A855F7', // Purple
@@ -110,6 +112,6 @@ class AttendanceByNominalUbicationChart extends ChartWidget
     {
         $total = Attendance::whereDate('day', today())->count();
 
-        return static::$heading." • Total: $total";
+        return static::$heading . " • Total: $total";
     }
 }

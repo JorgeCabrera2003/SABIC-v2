@@ -5,9 +5,12 @@ namespace App\Filament\Widgets;
 use App\Models\Attendance;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class AttendanceByTimeChart extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?string $heading = 'Asistencias en los últimos 5 días';
 
     protected static ?int $sort = 2;
@@ -39,7 +42,7 @@ class AttendanceByTimeChart extends ChartWidget
                 [
                     'label' => 'Personas asistentes',
                     'data' => $data,
-                    'backgroundColor' => '#6366F1',
+                    'backgroundColor' => '#206d02ff',
                     'borderWidth' => 0,
                     'hoverOffset' => 12,
                     'borderRadius' => 6,
