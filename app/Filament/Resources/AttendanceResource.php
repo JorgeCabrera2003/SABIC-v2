@@ -20,6 +20,13 @@ class AttendanceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Asistencia';
+
+    protected static ?string $pluralLabel = 'Asistencias';
+
+    protected static ?string $modelLabel = 'Asistencia';
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -54,28 +61,32 @@ class AttendanceResource extends Resource
                     ->searchable(['name', 'last_name'])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('day')
+                    ->label('Fecha')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('hour')
+                    ->label('Hora')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('record_type')
+                    ->label('Tipo de Registro')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('observation')
+                    ->label('Observación')
                     ->searchable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\RestoreAction::make(),
+                // Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\RestoreBulkAction::make(),
+                    // Tables\Actions\ForceDeleteBulkAction::make(),
                 ]),
             ])->recordUrl(null);
     }
